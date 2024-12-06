@@ -1,0 +1,404 @@
+<html><head><base href="https://example.com/"></base>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meu Site de Anúncios</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #000000;
+}
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loader {
+    width: 80px;
+    height: 80px;
+    border: 8px solid #333;
+    border-top: 8px solid #ff0000;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.main-content, .profile-content {
+    display: none;
+    max-width: 480px;
+    margin: 0 auto;
+    background: #000000;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-header {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.profile-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.profile-button {
+    background: #333;
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.profile-button:hover {
+    background: #444;
+    transform: scale(1.05);
+}
+
+.droplet {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #ff0000;
+    border-radius: 50%;
+    animation: drop 3s linear infinite;
+}
+
+@keyframes drop {
+    0% {
+        transform: translateY(-20px);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+.top-button {
+    width: 100%;
+    height: 80px;
+    background: #1a1a1a;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    border: none;
+    cursor: pointer;
+    box-shadow: inset -4px -4px 8px rgba(255,255,255,0.1),
+                inset 4px 4px 8px rgba(0,0,0,0.5);
+}
+
+.waveform {
+    width: 120px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.waveform-bar {
+    width: 6px;
+    background: #ff0000;
+    border-radius: 3px;
+}
+
+.nav-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #1a1a1a;
+    padding: 15px;
+    box-shadow: 0 -2px 10px rgba(255,0,0,0.2);
+    display: flex;
+    justify-content: space-around;
+    z-index: 1000;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.nav-item svg {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 5px;
+}
+
+.ad-card {
+    background: #1a1a1a;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 5px 5px 15px rgba(255,0,0,0.1);
+    color: #ffffff;
+    transition: transform 0.3s ease;
+}
+
+.ad-card:hover {
+    transform: translateY(-5px);
+}
+
+.ad-image {
+    width: 100%;
+    height: 200px;
+    background: #333;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background: linear-gradient(45deg, #1a1a1a, #333);
+}
+
+.ad-card iframe {
+    width: 100%;
+    height: 250px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border: none;
+}
+
+.ad-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #ff0000;
+}
+
+.ad-card p {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #ffffff;
+}
+
+.search-bar {
+    background: #1a1a1a;
+    padding: 10px;
+    border-radius: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(255,0,0,0.2);
+    display: flex;
+    align-items: center;
+    transform: translateY(-100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    max-width: 440px;
+    margin: 0 auto;
+    z-index: 100;
+    border: 2px solid;
+    animation: borderColor 5s infinite;
+}
+
+@keyframes borderColor {
+    0% { border-color: #ff0000; }
+    20% { border-color: #000000; }
+    40% { border-color: #ff0000; }
+    60% { border-color: #0000ff; }
+    80% { border-color: #ffffff; }
+    100% { border-color: #00ff00; }
+}
+
+.search-bar input {
+    background: #1a1a1a;
+    color: #ffffff;
+    border: none;
+    width: 100%;
+    padding: 5px 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.search-bar.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+@keyframes waveAnimation {
+    0% { height: 12px; }
+    50% { height: 32px; }
+    100% { height: 12px; }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+    <div class="loading-screen">
+        <div class="loader"></div>
+    </div>
+
+    <div class="main-content">
+        <div class="search-bar">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" placeholder="Pesquisar anúncios...">
+        </div>
+
+        <button class="top-button">
+            <div class="waveform">
+                <div class="waveform-bar" style="height:24px; animation: waveAnimation 1s infinite;"></div>
+                <div class="waveform-bar" style="height:16px; animation: waveAnimation 1s infinite 0.2s;"></div>
+                <div class="waveform-bar" style="height:32px; animation: waveAnimation 1s infinite 0.4s;"></div>
+                <div class="waveform-bar" style="height:20px; animation: waveAnimation 1s infinite 0.6s;"></div>
+                <div class="waveform-bar" style="height:28px; animation: waveAnimation 1s infinite 0.8s;"></div>
+                <div class="waveform-bar" style="height:18px; animation: waveAnimation 1s infinite 0.3s;"></div>
+                <div class="waveform-bar" style="height:26px; animation: waveAnimation 1s infinite 0.5s;"></div>
+                <div class="waveform-bar" style="height:22px; animation: waveAnimation 1s infinite 0.7s;"></div>
+            </div>
+        </button>
+
+        <div class="ad-card">
+            <iframe width="560" height="315" 
+                    src="https://www.youtube.com/embed/XKWGT3C4Lz0?si=Bc382YKuzuE2iEgg" 
+                    title="YouTube video player" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+        <div class="ad-card">
+            <div class="ad-image"></div>
+            <h3>iPhone 13 Pro Max</h3>
+            <p>R$ 5.999,99</p>
+            <p>Novo iPhone 13 Pro Max, 256GB, Câmera tripla, 5G</p>
+        </div>
+
+        <div class="ad-card">
+            <div class="ad-image"></div>
+            <h3>PlayStation 5</h3>
+            <p>R$ 4.499,99</p>
+            <p>Console PS5 novo na caixa, com 2 controles</p>
+        </div>
+
+        <div class="ad-card">
+            <div class="ad-image"></div>
+            <h3>Notebook Gamer</h3>
+            <p>R$ 6.999,99</p>
+            <p>Notebook Gamer Alienware, RTX 3080, 32GB RAM</p>
+        </div>
+
+        <div style="height:80px"></div>
+    </div>
+
+    <div class="profile-content">
+        <div class="profile-header">
+            <h2 style="color: white; margin-bottom: 15px;">Meu Perfil</h2>
+            <div class="profile-buttons">
+                <button class="profile-button">Meus Anúncios</button>
+                <button class="profile-button">Favoritos</button>
+                <button class="profile-button">Configurações</button>
+                <button class="profile-button">Mensagens</button>
+                <button class="profile-button">Histórico</button>
+                <button class="profile-button">Ajuda</button>
+            </div>
+        </div>
+        <div style="height:80px"></div>
+    </div>
+
+    <nav class="nav-bar">
+        <a href="javascript:void(0)" class="nav-item" id="home-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            </svg>
+            Home
+        </a>
+        <div class="nav-item" id="search-toggle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Buscar
+        </div>
+        <a href="https://example.com/post" class="nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="16"/>
+                <line x1="8" y1="12" x2="16" y2="12"/>
+            </svg>
+            Anunciar
+        </a>
+        <div class="nav-item" id="profile-button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+            </svg>
+            Perfil
+        </div>
+    </nav>
+
+    <script>
+        function createDroplet() {
+            const droplet = document.createElement('div');
+            droplet.className = 'droplet';
+            droplet.style.left = Math.random() * 100 + '%';
+            document.querySelector('.main-content').appendChild(droplet);
+            
+            droplet.addEventListener('animationend', () => {
+                droplet.remove();
+            });
+        }
+
+        setInterval(createDroplet, 500);
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loading-screen').style.display = 'none';
+                document.querySelector('.main-content').style.display = 'block';
+            }, 2000);
+        });
+
+        document.getElementById('search-toggle').addEventListener('click', function() {
+            const searchBar = document.querySelector('.search-bar');
+            searchBar.classList.toggle('active');
+            if (searchBar.classList.contains('active')) {
+                searchBar.querySelector('input').focus();
+            }
+        });
+
+        document.getElementById('home-button').addEventListener('click', function() {
+            document.querySelector('.profile-content').style.display = 'none';
+            document.querySelector('.main-content').style.display = 'block';
+        });
+
+        document.getElementById('profile-button').addEventListener('click', function() {
+            document.querySelector('.main-content').style.display = 'none';
+            document.querySelector('.profile-content').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
